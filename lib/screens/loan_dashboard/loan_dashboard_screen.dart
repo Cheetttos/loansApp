@@ -3,6 +3,7 @@ import 'package:expense_tracker/screens/loan_dashboard/local_widget/loan_info_ca
 import 'package:expense_tracker/styles/color.dart';
 import 'package:expense_tracker/styles/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LoanDashboardScreen extends StatefulWidget {
   const LoanDashboardScreen({super.key});
@@ -171,7 +172,9 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
-        onPressed: () {},
+        onPressed: () {
+          GoRouter.of(context).go('/add_loan');
+        },
         child: const Icon(Icons.add),
       ),
     );
