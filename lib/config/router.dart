@@ -1,3 +1,4 @@
+import 'package:expense_tracker/screens/authentication/login.dart';
 import 'package:expense_tracker/screens/authentication/register.dart';
 import 'package:expense_tracker/screens/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -14,10 +15,13 @@ final router = GoRouter(initialLocation: '/', routes: [
     //   }
     //   // return "/";
     // },
-    
   ),
   GoRoute(
     path: '/register_screen',
     builder: (context, state) => const RegisterScreen(),
+  ),
+  GoRoute(
+    path: '/login_screen',
+    builder: (context, state) => const LoginScreen(),
   )
 ]);

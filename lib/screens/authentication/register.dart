@@ -1,8 +1,10 @@
 import 'package:expense_tracker/config/extensions.dart';
 import 'package:expense_tracker/styles/color.dart';
 import 'package:expense_tracker/styles/theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_text_form_field/flutter_text_form_field.dart';
+import 'package:go_router/go_router.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,7 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(30),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -60,13 +62,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 50.height(),
-                Text.rich(TextSpan(children: [
+                Text.rich(
                   TextSpan(
-                    text: "Don't have an account? ",
-                    style: AppTheme.titleStyle(isBold: true),
+                    children: [
+                      TextSpan(
+                        text: "Already have an account? ",
+                        style: AppTheme.titleStyle(isBold: true),
+                      ),
+                      TextSpan(
+                          text: "Sign In",
+                          style: AppTheme.titleStyle(color: primaryColor, isBold: true),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              context.go('/login_screen');
+                            })
+                    ],
                   ),
-                  TextSpan(text: "Sign Up", style: AppTheme.titleStyle(color: primaryColor, isBold: true))
-                ]))
+                )
               ],
             ),
           ),
