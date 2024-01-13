@@ -1,4 +1,5 @@
 import 'package:expense_tracker/config/extensions.dart';
+import 'package:expense_tracker/shared/widgets/custom_button.dart';
 import 'package:expense_tracker/styles/color.dart';
 import 'package:expense_tracker/styles/theme.dart';
 import 'package:flutter/gestures.dart';
@@ -50,16 +51,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   border: Border.all(color: greyColor),
                 ),
                 100.height(),
-                TextButton(
+                CustomButton(
                   onPressed: () {},
-                  style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.resolveWith(
-                          (states) => Size(MediaQuery.of(context).size.width, 0)),
-                      backgroundColor: MaterialStateColor.resolveWith((states) => primaryColor)),
-                  child: Text(
-                    'Register',
-                    style: AppTheme.titleStyle(color: whiteColor),
-                  ),
+                  text: 'Register',
                 ),
                 50.height(),
                 Text.rich(

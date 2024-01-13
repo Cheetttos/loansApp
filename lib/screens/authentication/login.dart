@@ -1,4 +1,5 @@
 import 'package:expense_tracker/config/extensions.dart';
+import 'package:expense_tracker/shared/widgets/custom_button.dart';
 import 'package:expense_tracker/styles/color.dart';
 import 'package:expense_tracker/styles/theme.dart';
 import 'package:flutter/gestures.dart';
@@ -43,16 +44,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   border: Border.all(color: greyColor),
                 ),
                 100.height(),
-                TextButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                      fixedSize: MaterialStateProperty.resolveWith(
-                          (states) => Size(MediaQuery.of(context).size.width, 0)),
-                      backgroundColor: MaterialStateColor.resolveWith((states) => primaryColor)),
-                  child: Text(
-                    'Login',
-                    style: AppTheme.titleStyle(color: whiteColor),
-                  ),
+                CustomButton(
+                  onPressed: () {
+                    print('hello ');
+                    context.go('/loan_dashboard');
+                  },
+                  text: 'Login',
                 ),
                 50.height(),
                 Text.rich(TextSpan(children: [

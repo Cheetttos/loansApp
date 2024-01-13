@@ -7,3 +7,13 @@ extension IntSizedBoxExtension on int {
     );
   }
 }
+
+extension EllipsisExtension on String {
+  String ellipsis() {
+    if (length > 14) {
+      final getFirst10String = substring(0, 14);
+      return '$getFirst10String...';
+    }
+    return this;
+  }
+}
