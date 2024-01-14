@@ -173,7 +173,7 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         onPressed: () {
-          GoRouter.of(context).go('/add_loan');
+          context.push('/add_loan');
         },
         child: const Icon(Icons.add),
       ),
