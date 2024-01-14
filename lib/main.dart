@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent, scrolledUnderElevation: 0),
           scaffoldBackgroundColor: whiteColor,
+          primaryColor: primaryColor,
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:expense_tracker/config/extensions.dart';
 import 'package:expense_tracker/enums/enums.dart';
 import 'package:expense_tracker/provider/loan/loan_provider.dart';
+import 'package:expense_tracker/shared/widgets/date_picker.dart';
 import 'package:expense_tracker/styles/color.dart';
 import 'package:expense_tracker/styles/theme.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class AddLoanScreen extends StatefulWidget {
 }
 
 class _AddLoanScreenState extends State<AddLoanScreen> {
+  final currentDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Consumer<LoanProviderImpl>(builder: (context, state, _) {
@@ -55,7 +57,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                     return RadioListTile(
                       activeColor: primaryColor,
                       contentPadding: const EdgeInsets.all(0),
-                      value: index,
+                      value: type,
                       groupValue: state.selectedLoanType,
                       onChanged: (value) {
                         state.selectedLoanType = value;
@@ -162,12 +164,18 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                     children: [
                       Expanded(
                         child: CustomTextField(
-                          state.loanAmountController,
+                          state.incurredDateController,
                           hint: 'Incurred Date',
                           keyboardType: TextInputType.number,
                           password: false,
-                          onTap: () {
+                          onTap: () async {
                             ///show date picker
+                            final date = await pickDate(context,
+                                firstDate: DateTime(currentDate.year - 1), secondDate: currentDate);
+
+                            if (date != null) {
+                              state.incurredDateController.text = date.toString();
+                            }
                           },
                           border: Border.all(color: greyColor),
                         ),
@@ -175,18 +183,46 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                       30.width(),
                       Expanded(
                         child: CustomTextField(
-                          state.loanAmountController,
+                          state.dueDateController,
                           hint: 'Due Date',
                           keyboardType: TextInputType.number,
                           password: false,
-                          onTap: () {
+                          onTap: () async {
                             ///show date picker
+                            final date = await pickDate(context,
+                                firstDate: currentDate, secondDate: DateTime(currentDate.year + 150));
+
+                            if (date != null) {
+                              state.dueDateController.text = date.toString();
+                            }
                           },
                           border: Border.all(color: greyColor),
                         ),
                       ),
                     ],
                   ),
+                  20.height(),
+                  if (state.selectedLoanType != null)
+                    Column(
+                      children: [
+                        Text(
+                          "Debtor Details",
+                          style: AppTheme.headerStyle(),
+                        ),
+                        Text(
+                          "Loan Name",
+                          style: AppTheme.headerStyle(),
+                        ),
+                        8.height(),
+                        CustomTextField(
+                          state.loanNameController,
+                          hint: 'Loan Name',
+                          password: false,
+                          border: Border.all(color: greyColor),
+                        ),
+                        20.height(),
+                      ],
+                    )
                 ],
               ),
             ),

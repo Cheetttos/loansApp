@@ -1,4 +1,5 @@
 import 'package:currency_picker/currency_picker.dart';
+import 'package:expense_tracker/enums/enums.dart';
 import 'package:flutter/material.dart';
 
 class LoanProviderImpl extends ChangeNotifier {
@@ -16,14 +17,14 @@ class LoanProviderImpl extends ChangeNotifier {
     _updateState();
   }
 
-  int? _selectedLoanType;
-
-  int? get selectedLoanType => _selectedLoanType;
-
-  set selectedLoanType(int? value) {
+  //For loan type
+  LoanType? _selectedLoanType;
+  LoanType? get selectedLoanType => _selectedLoanType;
+  set selectedLoanType(LoanType? value) {
     _selectedLoanType = value;
     _updateState();
   }
+  //Loan type ends
 
   String? _uploadedDocument;
 
