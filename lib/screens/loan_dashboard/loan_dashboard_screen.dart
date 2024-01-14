@@ -131,7 +131,9 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
                         final status = index % 2 == 0 ? true : false;
                         return LoanInfoCard(
                           isLoaned: status,
-                          onTap: () {},
+                          onTap: () {
+                            context.push('/view_loan');
+                          },
                         );
                       }),
                     ),
@@ -157,7 +159,9 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
                         final status = index % 2 == 0 ? true : false;
                         return LoanInfoCard(
                           isLoaned: status,
-                          onTap: () {},
+                          onTap: () {
+                            context.push('/view_loan');
+                          },
                         );
                       }),
                     ),

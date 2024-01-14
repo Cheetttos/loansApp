@@ -2,6 +2,7 @@ import 'package:expense_tracker/screens/authentication/login.dart';
 import 'package:expense_tracker/screens/authentication/register.dart';
 import 'package:expense_tracker/screens/loan_dashboard/add_loan/add_loan.dart';
 import 'package:expense_tracker/screens/loan_dashboard/loan_dashboard_screen.dart';
+import 'package:expense_tracker/screens/loan_dashboard/view_loan/view_loan.dart';
 import 'package:expense_tracker/screens/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -35,6 +36,10 @@ final router = GoRouter(
     GoRoute(
       path: '/add_loan',
       builder: (context, state) => const AddLoanScreen(),
+    ),
+    GoRoute(
+      path: '/view_loan',
+      builder: (context, state) => const ViewLoadScreen(),
     )
   ],
 );
