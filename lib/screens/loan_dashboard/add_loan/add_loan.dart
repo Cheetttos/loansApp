@@ -2,11 +2,13 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:expense_tracker/config/extensions.dart';
 import 'package:expense_tracker/enums/enums.dart';
 import 'package:expense_tracker/provider/loan/loan_provider.dart';
+import 'package:expense_tracker/shared/widgets/custom_button.dart';
 import 'package:expense_tracker/shared/widgets/date_picker.dart';
 import 'package:expense_tracker/styles/color.dart';
 import 'package:expense_tracker/styles/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_text_form_field/flutter_text_form_field.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class AddLoanScreen extends StatefulWidget {
@@ -204,23 +206,45 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                   20.height(),
                   if (state.selectedLoanType != null)
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Debtor Details",
+                          "${state.selectedLoanType == LoanType.LoanOwedByMe ? 'Creditor' : 'Debtor'}  Details",
                           style: AppTheme.headerStyle(),
                         ),
+                        10.height(),
                         Text(
-                          "Loan Name",
+                          "Full Name",
                           style: AppTheme.headerStyle(),
                         ),
                         8.height(),
                         CustomTextField(
-                          state.loanNameController,
-                          hint: 'Loan Name',
+                          state.creditorOrDebtorNameController,
+                          hint: 'Full Name',
                           password: false,
                           border: Border.all(color: greyColor),
                         ),
-                        20.height(),
+                        8.height(),
+                        Text(
+                          "Phone Number",
+                          style: AppTheme.headerStyle(),
+                        ),
+                        8.height(),
+                        CustomTextField(
+                          state.creditorOrDebtorPhoneNumberController,
+                          hint: 'Phone Number',
+                          keyboardType: TextInputType.number,
+                          password: false,
+                          border: Border.all(color: greyColor),
+                        ),
+                        40.height(),
+                        CustomButton(
+                          onPressed: () {
+                            context.go('/loan_dashboard');
+                          },
+                          text: 'Send Request',
+                        ),
+                        40.height(),
                       ],
                     )
                 ],

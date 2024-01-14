@@ -8,6 +8,10 @@ class LoanProviderImpl extends ChangeNotifier {
   TextEditingController incurredDateController = TextEditingController();
   TextEditingController dueDateController = TextEditingController();
 
+  //creditor or debtor's controller
+  TextEditingController creditorOrDebtorNameController = TextEditingController();
+  TextEditingController creditorOrDebtorPhoneNumberController = TextEditingController();
+
   Currency? _selectedCurrency;
 
   Currency? get selectedCurrency => _selectedCurrency;
