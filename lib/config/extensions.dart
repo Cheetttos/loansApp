@@ -6,6 +6,12 @@ extension IntSizedBoxExtension on int {
       height: toDouble(),
     );
   }
+
+  SizedBox width() {
+    return SizedBox(
+      width: toDouble(),
+    );
+  }
 }
 
 extension EllipsisExtension on String {

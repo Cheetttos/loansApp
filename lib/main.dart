@@ -1,5 +1,6 @@
 import 'package:expense_tracker/config/router.dart';
 import 'package:expense_tracker/provider/loan/loan_provider.dart';
+import 'package:expense_tracker/styles/color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,10 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         routerConfig: router,
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(backgroundColor: Colors.transparent, scrolledUnderElevation: 0),
+          scaffoldBackgroundColor: whiteColor,
+        ),
       ),
     );
   }
