@@ -99,12 +99,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             style: AppTheme.titleStyle(isBold: true),
                           ),
                           TextSpan(
-                              text: "Sign In",
-                              style: AppTheme.titleStyle(color: primaryColor, isBold: true),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  context.go('/login_screen');
-                                })
+                            text: "Sign In",
+                            style: AppTheme.titleStyle(color: primaryColor, isBold: true),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                context.go('/login_screen');
+                              },
+                          )
                         ],
                       ),
                     )

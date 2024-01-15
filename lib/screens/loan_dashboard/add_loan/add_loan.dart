@@ -2,6 +2,9 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:expense_tracker/config/extensions.dart';
 import 'package:expense_tracker/enums/enums.dart';
 import 'package:expense_tracker/provider/loan/loan_provider.dart';
+import 'package:expense_tracker/service/upload_doc_service.dart';
+import 'package:expense_tracker/shared/utils/message.dart';
+import 'package:expense_tracker/shared/utils/pick_file.dart';
 import 'package:expense_tracker/shared/widgets/custom_button.dart';
 import 'package:expense_tracker/shared/widgets/date_picker.dart';
 import 'package:expense_tracker/styles/color.dart';
@@ -22,7 +25,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
   final currentDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoanProviderImpl>(builder: (context, state, _) {
+    return Consumer<LoanProviderImpl>(builder: (context, stateModel, _) {
       return Scaffold(
         appBar: AppBar(),
         body: GestureDetector(
@@ -41,7 +44,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                   ),
                   8.height(),
                   CustomTextField(
-                    state.loanNameController,
+                    stateModel.loanNameController,
                     hint: 'Loan Name',
                     password: false,
                     border: Border.all(color: greyColor),
@@ -60,9 +63,9 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                       activeColor: primaryColor,
                       contentPadding: const EdgeInsets.all(0),
                       value: type,
-                      groupValue: state.selectedLoanType,
+                      groupValue: stateModel.selectedLoanType,
                       onChanged: (value) {
-                        state.selectedLoanType = value;
+                        stateModel.selectedLoanType = value;
                       },
                       title: Text(loanText),
                     );
@@ -77,7 +80,31 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          state.uploadedDocument = 'hello';
+                          pickDocument().then((value) async {
+                            if (value != null) {
+                              ///Upload the doc to the server
+                              stateModel.viewState = ViewState.Busy;
+
+                              final result = await uploadDocumentToServer(value);
+
+                              if (result.state == ViewState.Error) {
+                                if (context.mounted) {
+                                  showMessage(context, result.fileUrl);
+                                }
+                                stateModel.viewState = ViewState.Error;
+                                return;
+                              }
+
+                              if (result.state == ViewState.Success) {
+                                stateModel.uploadedDocument = result.fileUrl;
+                                if (context.mounted) {
+                                  showMessage(context, 'Document uploaded successfully');
+                                }
+                                stateModel.viewState = ViewState.Success;
+                                return;
+                              }
+                            }
+                          });
                         },
                         child: Text(
                           'Upload Document (pdf, image)',
@@ -85,7 +112,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                         ),
                       ),
                       const Spacer(),
-                      if (state.uploadedDocument != null)
+                      if (stateModel.uploadedDocument != null)
                         const Icon(
                           Icons.check_circle,
                           color: greenColor,
@@ -111,7 +138,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                     children: [
                       Expanded(
                         child: CustomTextField(
-                          state.loanAmountController,
+                          stateModel.loanAmountController,
                           hint: 'Loan Amount',
                           keyboardType: TextInputType.number,
                           password: false,
@@ -128,7 +155,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                               showCurrencyName: true,
                               showCurrencyCode: true,
                               onSelect: (Currency currency) {
-                                state.selectedCurrency = currency;
+                                stateModel.selectedCurrency = currency;
                               },
                             );
                           },
@@ -139,9 +166,9 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                                 border: Border.all(color: greyColor),
                                 color: whiteColor),
                             height: 50,
-                            child: Text(state.selectedCurrency == null
+                            child: Text(stateModel.selectedCurrency == null
                                 ? 'Currency'
-                                : '${state.selectedCurrency!.code} - ${state.selectedCurrency!.symbol}'),
+                                : '${stateModel.selectedCurrency!.code} - ${stateModel.selectedCurrency!.symbol}'),
                           ),
                         ),
                       )
@@ -166,7 +193,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                     children: [
                       Expanded(
                         child: CustomTextField(
-                          state.incurredDateController,
+                          stateModel.incurredDateController,
                           hint: 'Incurred Date',
                           keyboardType: TextInputType.number,
                           password: false,
@@ -176,7 +203,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                                 firstDate: DateTime(currentDate.year - 1), secondDate: currentDate);
 
                             if (date != null) {
-                              state.incurredDateController.text = date.toString();
+                              stateModel.incurredDateController.text = date.toString();
                             }
                           },
                           border: Border.all(color: greyColor),
@@ -185,7 +212,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                       30.width(),
                       Expanded(
                         child: CustomTextField(
-                          state.dueDateController,
+                          stateModel.dueDateController,
                           hint: 'Due Date',
                           keyboardType: TextInputType.number,
                           password: false,
@@ -195,7 +222,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                                 firstDate: currentDate, secondDate: DateTime(currentDate.year + 150));
 
                             if (date != null) {
-                              state.dueDateController.text = date.toString();
+                              stateModel.dueDateController.text = date.toString();
                             }
                           },
                           border: Border.all(color: greyColor),
@@ -204,12 +231,12 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                     ],
                   ),
                   20.height(),
-                  if (state.selectedLoanType != null)
+                  if (stateModel.selectedLoanType != null)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${state.selectedLoanType == LoanType.LoanOwedByMe ? 'Creditor' : 'Debtor'}  Details",
+                          "${stateModel.selectedLoanType == LoanType.LoanOwedByMe ? 'Creditor' : 'Debtor'}  Details",
                           style: AppTheme.headerStyle(),
                         ),
                         10.height(),
@@ -219,7 +246,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                         ),
                         8.height(),
                         CustomTextField(
-                          state.creditorOrDebtorNameController,
+                          stateModel.creditorOrDebtorNameController,
                           hint: 'Full Name',
                           password: false,
                           border: Border.all(color: greyColor),
@@ -231,7 +258,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                         ),
                         8.height(),
                         CustomTextField(
-                          state.creditorOrDebtorPhoneNumberController,
+                          stateModel.creditorOrDebtorPhoneNumberController,
                           hint: 'Phone Number',
                           keyboardType: TextInputType.number,
                           password: false,
@@ -240,7 +267,35 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                         40.height(),
                         CustomButton(
                           onPressed: () {
-                            context.go('/loan_dashboard');
+                            // context.go('/loan_dashboard');
+                            if (stateModel.loanNameController.text.isEmpty ||
+                                stateModel.loanAmountController.text.isEmpty ||
+                                stateModel.incurredDateController.text.isEmpty ||
+                                stateModel.dueDateController.text.isEmpty) {
+                              showMessage(context, "All Fields are required");
+                              return;
+                            }
+                            if (stateModel.selectedLoanType == null) {
+                              showMessage(context, "Please select a loan type");
+                              return;
+                            }
+
+                            if (stateModel.selectedCurrency == null) {
+                              showMessage(context, "Please select a currency");
+                              return;
+                            }
+
+                            if (stateModel.creditorOrDebtorNameController.text.isEmpty ||
+                                stateModel.creditorOrDebtorPhoneNumberController.text.isEmpty) {
+                              final messageType = stateModel.selectedLoanType == LoanType.LoanGivenByMe
+                                  ? "Debtor's details are required"
+                                  : "Creditor's details are required";
+
+                              showMessage(context, messageType);
+                              return;
+                            }
+
+                            ///success
                           },
                           text: 'Send Request',
                         ),
