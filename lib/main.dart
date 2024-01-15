@@ -1,5 +1,6 @@
 import 'package:expense_tracker/config/router.dart';
 import 'package:expense_tracker/firebase_options.dart';
+import 'package:expense_tracker/provider/authentication/auth_provider.dart';
 import 'package:expense_tracker/provider/loan/loan_provider.dart';
 import 'package:expense_tracker/styles/color.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LoanProviderImpl()),
+        ChangeNotifierProvider(create: (_) => AuthenticationProviderImpl()),
       ],
       child: MaterialApp.router(
         routerConfig: router,

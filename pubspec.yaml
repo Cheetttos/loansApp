@@ -43,6 +43,9 @@ dependencies:
   firebase_core: ^2.24.2
   cloud_firestore: ^4.14.0
   firebase_storage: ^11.6.0
+  flutter_utilities: ^0.0.1
+  intl: ^0.19.0
+  toastification: ^1.2.0
 
 dev_dependencies:
   flutter_test:
