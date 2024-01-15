@@ -90,12 +90,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: AppTheme.titleStyle(isBold: true),
                       ),
                       TextSpan(
-                          text: "Sign Up",
-                          style: AppTheme.titleStyle(color: primaryColor, isBold: true),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              context.go('/register_screen');
-                            })
+                        text: "Sign Up",
+                        style: AppTheme.titleStyle(color: primaryColor, isBold: true),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            context.go('/register_screen');
+                          },
+                      )
                     ]))
                   ],
                 ),
