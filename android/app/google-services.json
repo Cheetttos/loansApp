@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "512023659634",
+    "project_id": "loan-manager-4d5cc",
+    "storage_bucket": "loan-manager-4d5cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512023659634:android:2c7813ae999639abb12eeb",
+        "android_client_info": {
+          "package_name": "com.example.expense_tracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFN4UHjaAeoQ4W8lATYVba3uJ5Qusy6GM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
