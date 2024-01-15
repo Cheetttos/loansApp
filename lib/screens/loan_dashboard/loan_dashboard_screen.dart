@@ -23,7 +23,9 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              context.push('/search_loan');
+            },
             icon: const Icon(Icons.search_outlined),
           ),
         ],
