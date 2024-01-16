@@ -203,33 +203,17 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
   @override
   Future<void> searchLoan() async {
     _viewState = ViewState.Busy;
-    message = 'Fetching your loan...';
+    message = 'Searching for loan...';
     _updateState();
 
-    List<LoanModel> tempData = [];
+    await Future.delayed(const Duration(seconds: 1));
 
     try {
-      final result = await _loanRef
-          .doc(_user!.uid)
-          .collection('loan_details')
-          .where('loan_name'.toLowerCase(),
-              arrayContains: searchLoanQueryController.text.trim().toLowerCase())
-          .get();
+      final result = _loans.where(
+          (element) => element.loanName.toLowerCase().contains(searchLoanQueryController.text.toLowerCase()));
 
-      if (result.docs.isNotEmpty) {
-        final loanData = result.docs;
-
-        for (var i in loanData) {
-          final loanDataModel = LoanModel.fromJson(i.data());
-
-          ///Add ID
-          loanDataModel.loanId = i.id;
-          tempData.add(loanDataModel);
-        }
-
-        appLogger(loanData);
-
-        _searchedLoan = tempData;
+      if (result.isNotEmpty) {
+        _searchedLoan = result.toList();
       } else {
         _searchedLoan = [];
       }
