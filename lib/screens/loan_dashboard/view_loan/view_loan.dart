@@ -130,6 +130,7 @@ class _ViewLoadScreenState extends State<ViewLoadScreen> {
                                   }
                                   if (stateModel.viewState == ViewState.Success) {
                                     if (context.mounted) {
+                                      stateModel.viewLoan();
                                       showMessage(context, stateModel.message);
                                       context.go('/loan_dashboard');
                                     }
@@ -154,6 +155,7 @@ class _ViewLoadScreenState extends State<ViewLoadScreen> {
                                   }
                                   if (stateModel.viewState == ViewState.Success) {
                                     if (context.mounted) {
+                                      stateModel.viewLoan();
                                       showMessage(context, stateModel.message);
                                       context.go('/loan_dashboard');
                                     }

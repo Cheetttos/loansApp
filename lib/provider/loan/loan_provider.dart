@@ -173,7 +173,6 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
       appLogger(_loans.length);
 
       _updateState();
-      viewLoan();
     } on SocketException catch (_) {
       _viewState = ViewState.Error;
       message = 'Network error. Please try again later.';
@@ -221,7 +220,6 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
       appLogger(_loans.length);
 
       _updateState();
-      viewLoan();
     } on SocketException catch (_) {
       _viewState = ViewState.Error;
       message = 'Network error. Please try again later.';
