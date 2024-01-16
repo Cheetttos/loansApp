@@ -1,5 +1,6 @@
 import 'package:expense_tracker/config/constants.dart';
 import 'package:expense_tracker/styles/theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -44,7 +45,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _navigate() {
     Future.delayed(const Duration(seconds: 3), () {
-      context.go('/register_screen');
+      if (FirebaseAuth.instance.currentUser != null) {
+        context.go('/loan_dashboard');
+      } else {
+        context.go('/register_screen');
+      }
     });
   }
 }

@@ -266,7 +266,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                         ),
                         40.height(),
                         CustomButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // context.go('/loan_dashboard');
                             if (stateModel.loanNameController.text.isEmpty ||
                                 stateModel.loanAmountController.text.isEmpty ||
@@ -296,6 +296,20 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                             }
 
                             ///success
+                            await stateModel.addLoan();
+
+                            if (stateModel.viewState == ViewState.Error) {
+                              if (context.mounted) {
+                                showMessage(context, stateModel.message, isError: true);
+                              }
+                              return;
+                            }
+                            if (stateModel.viewState == ViewState.Success) {
+                              if (context.mounted) {
+                                showMessage(context, stateModel.message);
+                                context.go('/loan_dashboard');
+                              }
+                            }
                           },
                           text: 'Send Request',
                         ),

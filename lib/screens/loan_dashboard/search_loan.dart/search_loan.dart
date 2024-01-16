@@ -51,12 +51,13 @@ class _SearchLoanScreenState extends State<SearchLoanScreen> {
                 children: List.generate(
                   10,
                   (index) {
-                    return LoanInfoCard(
-                      onTap: () {
-                        context.push('/view_loan');
-                      },
-                      isLoaned: true,
-                    );
+                    return const Text("dfldf");
+                    // return LoanInfoCard(
+                    //   onTap: () {
+                    //     context.push('/view_loan');
+                    //   },
+                    //   isLoaned: true,
+                    // );
                   },
                 ),
               ),

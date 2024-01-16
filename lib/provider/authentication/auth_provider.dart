@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 abstract class AuthenticationProviderUseCase {
   Future<void> loginUser();
   Future<void> registerUser();
+  Future<void> logoutUser();
 }
 
 class AuthenticationProviderImpl extends ChangeNotifier implements AuthenticationProviderUseCase {
@@ -22,26 +23,26 @@ class AuthenticationProviderImpl extends ChangeNotifier implements Authenticatio
   @override
   Future<void> loginUser() async {
     state = ViewState.Busy;
-    message = 'Creating your account...';
+    message = 'Preparing your account...';
     _updateState();
 
     try {
       final result = await firebaseAuth.signInWithEmailAndPassword(
           email: emailController.text.trim(), password: passwordController.text.trim());
 
-      state == ViewState.Success;
-      message = 'Welcome back, ${result.user!}';
+      state = ViewState.Success;
+      message = 'Welcome back, ${result.user!.displayName}';
       _updateState();
     } on SocketException catch (_) {
-      state == ViewState.Error;
+      state = ViewState.Error;
       message = 'Network error. Please try again later.';
       _updateState();
     } on FirebaseAuthException catch (e) {
-      state == ViewState.Error;
+      state = ViewState.Error;
       message = e.code;
       _updateState();
     } catch (e) {
-      state == ViewState.Error;
+      state = ViewState.Error;
       message = 'Error creating account. Please try again later.';
       _updateState();
     }
@@ -60,19 +61,19 @@ class AuthenticationProviderImpl extends ChangeNotifier implements Authenticatio
       ///set username of user
       result.user!.updateDisplayName(userNameController.text.trim());
 
-      state == ViewState.Success;
+      state = ViewState.Success;
       message = 'Welcome, ${userNameController.text}';
       _updateState();
     } on SocketException catch (_) {
-      state == ViewState.Error;
+      state = ViewState.Error;
       message = 'Network error. Please try again later.';
       _updateState();
     } on FirebaseAuthException catch (e) {
-      state == ViewState.Error;
+      state = ViewState.Error;
       message = e.code;
       _updateState();
     } catch (e) {
-      state == ViewState.Error;
+      state = ViewState.Error;
       message = 'Error creating account. Please try again later.';
       _updateState();
     }
@@ -82,5 +83,10 @@ class AuthenticationProviderImpl extends ChangeNotifier implements Authenticatio
     WidgetsBinding.instance.addPostFrameCallback((_) {
       notifyListeners();
     });
+  }
+
+  @override
+  Future<void> logoutUser() async {
+    return await firebaseAuth.signOut();
   }
 }

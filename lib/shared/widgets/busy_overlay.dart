@@ -35,16 +35,15 @@ class BusyOverlay extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  // SizedBox(
-                  //   height: 50,
-                  //   width: 50,
-                  //   child: CircularProgressIndicator(
-                  //       color: AppColor.grey, backgroundColor: AppColor.primaryColor),
-                  // ),
-                  const Image(
-                    image: AssetImage("assets/logo.png"),
+                  const SizedBox(
+                    height: 50,
                     width: 50,
+                    child: CircularProgressIndicator(color: greyColor, backgroundColor: primaryColor),
                   ),
+                  // const Image(
+                  //   image: AssetImage("assets/logo.png"),
+                  //   width: 50,
+                  // ),
                   const SizedBox(
                     height: 10,
                   ),

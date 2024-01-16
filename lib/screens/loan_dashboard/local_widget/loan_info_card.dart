@@ -1,12 +1,16 @@
 import 'package:expense_tracker/config/extensions.dart';
+import 'package:expense_tracker/enums/enums.dart';
+import 'package:expense_tracker/model/loan_model.dart';
+import 'package:expense_tracker/shared/utils/currency_formatter.dart';
 import 'package:expense_tracker/styles/color.dart';
 import 'package:expense_tracker/styles/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class LoanInfoCard extends StatelessWidget {
-  final bool isLoaned;
+  final LoanModel loanData;
   final Function() onTap;
-  const LoanInfoCard({super.key, this.isLoaned = false, required this.onTap});
+  const LoanInfoCard({super.key, required this.loanData, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +29,11 @@ class LoanInfoCard extends StatelessWidget {
               children: [
                 Icon(
                   Icons.outbond,
-                  color: isLoaned ? redColor : greenColor,
+                  color: loanData.loanType == LoanType.LoanGivenByMe.name ? redColor : greenColor,
                 ),
                 Expanded(
                   child: Text(
-                    '\$50,000666',
+                    '${loanData.loanCurrency.symbol}${currencyFormatter(double.parse(loanData.loanAmount.toString()))}',
                     textAlign: TextAlign.right,
                     style: AppTheme.subTitleStyle(),
                   ),
@@ -38,15 +42,16 @@ class LoanInfoCard extends StatelessWidget {
             ),
             const Spacer(),
             Text(
-              'Emergency Loan'.ellipsis(),
+              loanData.loanName.ellipsis(),
               style: AppTheme.titleStyle(isBold: true),
             ),
-            Text(isLoaned
+            Text(loanData.loanType == LoanType.LoanGivenByMe.name
                 ? 'Loaned to'
                 : 'Owed by'), //return loaned to or owed by depending on the type of loan
-            Text('Destiny Ed'.ellipsis(), style: AppTheme.titleStyle(isBold: true)),
+            Text(loanData.fullName.ellipsis(), style: AppTheme.titleStyle(isBold: true)),
             const Text('On'),
-            Text('1st July 2024', style: AppTheme.titleStyle(isBold: true)),
+            Text(DateFormat.yMEd().format(loanData.loanDateIncurred),
+                style: AppTheme.titleStyle(isBold: true)),
           ],
         ),
       ),
