@@ -3,6 +3,7 @@ import 'package:expense_tracker/enums/enums.dart';
 import 'package:expense_tracker/provider/authentication/auth_provider.dart';
 import 'package:expense_tracker/provider/loan/loan_provider.dart';
 import 'package:expense_tracker/screens/loan_dashboard/local_widget/loan_info_card.dart';
+import 'package:expense_tracker/shared/utils/currency_formatter.dart';
 import 'package:expense_tracker/shared/widgets/busy_overlay.dart';
 import 'package:expense_tracker/styles/color.dart';
 import 'package:expense_tracker/styles/theme.dart';
@@ -27,6 +28,14 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<LoanProviderImpl>(builder: (context, stateModel, child) {
+      final totalLoaned = stateModel.loans
+          .where((element) => element.loanType == LoanType.LoanGivenByMe.name)
+          .fold(0.0, (previousValue, element) => previousValue + double.parse(element.loanAmount));
+
+      final totalOwed = stateModel.loans
+          .where((element) => element.loanType == LoanType.LoanOwedByMe.name)
+          .fold(0.0, (previousValue, element) => previousValue + double.parse(element.loanAmount));
+
       return BusyOverlay(
         show: stateModel.viewState == ViewState.Busy,
         title: stateModel.message,
@@ -95,7 +104,7 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
                                   ],
                                 ),
                                 Text(
-                                  "\$ -400,000",
+                                  "\$ -${currencyFormatter(totalLoaned)}",
                                   style: AppTheme.titleStyle(),
                                 ),
                                 const Divider(),
@@ -114,7 +123,7 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
                                   ],
                                 ),
                                 Text(
-                                  "\$ 400,000",
+                                  "\$ ${currencyFormatter(totalOwed)}",
                                   style: AppTheme.titleStyle(),
                                 ),
                               ],
@@ -129,7 +138,7 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
                                 style: AppTheme.headerStyle(),
                               ),
                               Text(
-                                "\$ 800,000",
+                                "\$ ${currencyFormatter(totalOwed - totalLoaned)}",
                                 style: AppTheme.titleStyle(),
                               ),
                             ],
@@ -191,7 +200,7 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
                                   return LoanInfoCard(
                                     loanData: data,
                                     onTap: () {
-                                      context.push('/view_loan');
+                                      context.push('/view_loan?loan_id=${data.loanId}');
                                     },
                                   );
                                 }),

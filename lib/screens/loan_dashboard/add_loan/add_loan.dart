@@ -306,6 +306,7 @@ class _AddLoanScreenState extends State<AddLoanScreen> {
                             }
                             if (stateModel.viewState == ViewState.Success) {
                               if (context.mounted) {
+                                stateModel.viewLoan();
                                 showMessage(context, stateModel.message);
                                 context.go('/loan_dashboard');
                               }

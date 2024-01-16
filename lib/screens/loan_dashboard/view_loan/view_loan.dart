@@ -98,7 +98,9 @@ class _ViewLoadScreenState extends State<ViewLoadScreen> {
                         10.height(),
 
                         Text(
-                          "Creditor Details",
+                          stateModel.singleLoan!.loanType == LoanType.LoanGivenByMe.name
+                              ? "Debtor's Details"
+                              : "Creditor's Details",
                           style: AppTheme.headerStyle(),
                         ),
 
@@ -140,31 +142,32 @@ class _ViewLoadScreenState extends State<ViewLoadScreen> {
                                 width: 0,
                               ),
                             ),
-                            20.width(),
-                            Expanded(
-                              child: CustomButton(
-                                onPressed: () async {
-                                  ///success
-                                  await stateModel.updateLoan(widget.loanId);
+                            if (stateModel.singleLoan!.loanStatus == LoanStatus.Pending.name) 20.width(),
+                            if (stateModel.singleLoan!.loanStatus == LoanStatus.Pending.name)
+                              Expanded(
+                                child: CustomButton(
+                                  onPressed: () async {
+                                    ///success
+                                    await stateModel.updateLoan(widget.loanId);
 
-                                  if (stateModel.viewState == ViewState.Error) {
-                                    if (context.mounted) {
-                                      showMessage(context, stateModel.message, isError: true);
+                                    if (stateModel.viewState == ViewState.Error) {
+                                      if (context.mounted) {
+                                        showMessage(context, stateModel.message, isError: true);
+                                      }
+                                      return;
                                     }
-                                    return;
-                                  }
-                                  if (stateModel.viewState == ViewState.Success) {
-                                    if (context.mounted) {
-                                      stateModel.viewLoan();
-                                      showMessage(context, stateModel.message);
-                                      context.go('/loan_dashboard');
+                                    if (stateModel.viewState == ViewState.Success) {
+                                      if (context.mounted) {
+                                        stateModel.viewLoan();
+                                        showMessage(context, stateModel.message);
+                                        context.go('/loan_dashboard');
+                                      }
                                     }
-                                  }
-                                },
-                                width: 0,
-                                text: 'Mark as Completed',
+                                  },
+                                  width: 0,
+                                  text: 'Mark as Completed',
+                                ),
                               ),
-                            ),
                           ],
                         ),
                         50.height()
