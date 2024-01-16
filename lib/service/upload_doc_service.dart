@@ -10,15 +10,19 @@ Future<UploadDocResultModel> uploadDocumentToServer(String docPath) async {
 
   final docName = docPath.split('/').last;
 
+  appLogger("uploading image : $docName");
+
   try {
     // Create a Reference to the file
-    Reference ref = FirebaseStorage.instance.ref().child('contestant-image').child('/$docName.pdf');
+    Reference ref = FirebaseStorage.instance.ref().child('loan').child('/$docName.pdf');
 
     uploadTask = ref.putFile(File(docPath));
 
     TaskSnapshot snapshot = await uploadTask.whenComplete(() => appLogger("Task completed"));
 
     final downloadUrl = await snapshot.ref.getDownloadURL();
+
+    appLogger("uploading image uril : $downloadUrl");
 
     return Future.value(UploadDocResultModel(state: ViewState.Success, fileUrl: downloadUrl));
   } on FirebaseException catch (error) {

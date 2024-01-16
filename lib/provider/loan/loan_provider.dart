@@ -23,6 +23,8 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
   TextEditingController incurredDateController = TextEditingController();
   TextEditingController dueDateController = TextEditingController();
 
+  TextEditingController searchLoanQueryController = TextEditingController();
+
   //creditor or debtor's controller
   TextEditingController creditorOrDebtorNameController = TextEditingController();
   TextEditingController creditorOrDebtorPhoneNumberController = TextEditingController();
@@ -66,7 +68,12 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
     _updateState();
   }
 
-  String message = '';
+  String _message = '';
+  String get message => _message;
+  set message(String value) {
+    _message = value;
+    _updateState();
+  }
 
   final _loanRef = FirebaseFirestore.instance.collection('loans');
   final _user = FirebaseAuth.instance.currentUser;
@@ -90,6 +97,11 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
   LoanModel? _singleLoan;
 
   LoanModel? get singleLoan => _singleLoan;
+
+  /// single loan
+  List<LoanModel>? _searchedLoan;
+
+  List<LoanModel>? get searchedLoan => _searchedLoan;
 
   _updateState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -189,8 +201,53 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
   }
 
   @override
-  Future<void> searchLoan() {
-    throw UnimplementedError();
+  Future<void> searchLoan() async {
+    _viewState = ViewState.Busy;
+    message = 'Fetching your loan...';
+    _updateState();
+
+    List<LoanModel> tempData = [];
+
+    try {
+      final result = await _loanRef
+          .doc(_user!.uid)
+          .collection('loan_details')
+          .where('loan_name'.toLowerCase(),
+              arrayContains: searchLoanQueryController.text.trim().toLowerCase())
+          .get();
+
+      if (result.docs.isNotEmpty) {
+        final loanData = result.docs;
+
+        for (var i in loanData) {
+          final loanDataModel = LoanModel.fromJson(i.data());
+
+          ///Add ID
+          loanDataModel.loanId = i.id;
+          tempData.add(loanDataModel);
+        }
+
+        appLogger(loanData);
+
+        _searchedLoan = tempData;
+      } else {
+        _searchedLoan = [];
+      }
+      _viewState = ViewState.Success;
+      _updateState();
+    } on SocketException catch (_) {
+      _viewState = ViewState.Error;
+      message = 'Network error. Please try again later.';
+      _updateState();
+    } on FirebaseException catch (e) {
+      _viewState = ViewState.Error;
+      message = e.code;
+      _updateState();
+    } catch (e) {
+      _viewState = ViewState.Error;
+      message = 'Error occured. Please try again later.';
+      _updateState();
+    }
   }
 
   @override
@@ -251,8 +308,6 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
 
         for (var i in loanData) {
           appLogger(loanData);
-
-          appLogger("Iiiii ${i.id}");
 
           final loanDataModel = LoanModel.fromJson(i.data());
 

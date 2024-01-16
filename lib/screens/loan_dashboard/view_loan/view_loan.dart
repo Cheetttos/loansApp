@@ -2,8 +2,10 @@ import 'package:expense_tracker/config/extensions.dart';
 import 'package:expense_tracker/enums/enums.dart';
 import 'package:expense_tracker/provider/loan/loan_provider.dart';
 import 'package:expense_tracker/screens/loan_dashboard/local_widget/loan_view_details_card.dart';
+import 'package:expense_tracker/shared/utils/app_logger.dart';
 import 'package:expense_tracker/shared/utils/currency_formatter.dart';
 import 'package:expense_tracker/shared/utils/message.dart';
+import 'package:expense_tracker/shared/utils/url_launcher_helper.dart';
 import 'package:expense_tracker/shared/widgets/busy_overlay.dart';
 import 'package:expense_tracker/shared/widgets/custom_button.dart';
 import 'package:expense_tracker/styles/color.dart';
@@ -69,7 +71,8 @@ class _ViewLoadScreenState extends State<ViewLoadScreen> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  launchUrl(stateModel.singleLoan!.loanDoc);
+                                  launchSite(stateModel.singleLoan!.loanDoc);
+                                  appLogger(stateModel.singleLoan!.loanDoc);
                                 },
                                 child: Text(
                                   "View Document",
