@@ -1,5 +1,5 @@
 class LoanModel {
-  String loanId;
+  String? loanId;
   final String loanName;
   final String loanType;
   final dynamic loanDoc;

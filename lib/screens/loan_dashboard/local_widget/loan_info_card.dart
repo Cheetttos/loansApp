@@ -47,7 +47,7 @@ class LoanInfoCard extends StatelessWidget {
             ),
             Text(loanData.loanType == LoanType.LoanGivenByMe.name
                 ? 'Loaned to'
-                : 'Owed by'), //return loaned to or owed by depending on the type of loan
+                : 'Borrowed from'), //return loaned to or owed by depending on the type of loan
             Text(loanData.fullName.ellipsis(), style: AppTheme.titleStyle(isBold: true)),
             const Text('On'),
             Text(DateFormat.yMEd().format(loanData.loanDateIncurred),

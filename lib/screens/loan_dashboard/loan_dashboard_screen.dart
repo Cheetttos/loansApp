@@ -57,6 +57,7 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
             padding: const EdgeInsets.all(20),
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //date
                   Align(
@@ -153,6 +154,7 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
                           ? SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: List.generate(stateModel.pendingLoans.length, (index) {
                                   final data = stateModel.pendingLoans[index];
                                   return LoanInfoCard(
@@ -183,6 +185,7 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
                           ? SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: List.generate(stateModel.completedLoans.length, (index) {
                                   final data = stateModel.completedLoans[index];
                                   return LoanInfoCard(

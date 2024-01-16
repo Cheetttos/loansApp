@@ -138,11 +138,11 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
       message = "Saved successfully";
       _updateState();
     } on SocketException catch (_) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = 'Network error. Please try again later.';
       _updateState();
     } on FirebaseException catch (e) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = e.code;
       _updateState();
     } catch (e) {
@@ -173,12 +173,13 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
       appLogger(_loans.length);
 
       _updateState();
+      viewLoan();
     } on SocketException catch (_) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = 'Network error. Please try again later.';
       _updateState();
     } on FirebaseException catch (e) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = e.code;
       _updateState();
     } catch (e) {
@@ -220,16 +221,17 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
       appLogger(_loans.length);
 
       _updateState();
+      viewLoan();
     } on SocketException catch (_) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = 'Network error. Please try again later.';
       _updateState();
     } on FirebaseException catch (e) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = e.code;
       _updateState();
     } catch (e) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = 'Error occured. Please try again later.';
       _updateState();
     }
@@ -250,6 +252,10 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
         final loanData = result.docs;
 
         for (var i in loanData) {
+          appLogger(loanData);
+
+          appLogger("Iiiii ${i.id}");
+
           final loanDataModel = LoanModel.fromJson(i.data());
 
           ///Add ID
@@ -276,15 +282,16 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
       message = "Loans Fetched";
       _updateState();
     } on SocketException catch (_) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = 'Network error. Please try again later.';
       _updateState();
     } on FirebaseException catch (e) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = e.code;
       _updateState();
     } catch (e) {
-      _viewState == ViewState.Error;
+      appLogger(e.toString());
+      _viewState = ViewState.Error;
       message = 'Error occured. Please try again later.';
       _updateState();
     }
@@ -315,15 +322,15 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
 
       _updateState();
     } on SocketException catch (_) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = 'Network error. Please try again later.';
       _updateState();
     } on FirebaseException catch (e) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = e.code;
       _updateState();
     } catch (e) {
-      _viewState == ViewState.Error;
+      _viewState = ViewState.Error;
       message = 'Error occured. Please try again later.';
       _updateState();
     }

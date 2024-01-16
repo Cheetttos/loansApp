@@ -40,134 +40,136 @@ class _ViewLoadScreenState extends State<ViewLoadScreen> {
           appBar: AppBar(
             title: Text('Loan Details', style: AppTheme.headerStyle()),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(20),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //loan name
-                  LoanViewDetailsCard(
-                    titleText: stateModel.singleLoan!.loanName,
-                    headerText: 'Loan Name',
-                  ),
-
-                  LoanViewDetailsCard(
-                    titleText:
-                        '${stateModel.singleLoan!.loanCurrency.symbol} ${currencyFormatter(double.parse(stateModel.singleLoan!.loanAmount))}',
-                    headerText: 'Loan Amount',
-                  ),
-
-                  if (stateModel.singleLoan!.loanDoc != null)
-                    Column(
+          body: stateModel.singleLoan == null
+              ? const SizedBox()
+              : Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        //loan name
+                        LoanViewDetailsCard(
+                          titleText: stateModel.singleLoan!.loanName,
+                          headerText: 'Loan Name',
+                        ),
+
+                        LoanViewDetailsCard(
+                          titleText:
+                              '${stateModel.singleLoan!.loanCurrency.symbol} ${currencyFormatter(double.parse(stateModel.singleLoan!.loanAmount))}',
+                          headerText: 'Loan Amount',
+                        ),
+
+                        if (stateModel.singleLoan!.loanDoc != null)
+                          Column(
+                            children: [
+                              Text(
+                                "Loan Document",
+                                style: AppTheme.headerStyle(),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  launchUrl(stateModel.singleLoan!.loanDoc);
+                                },
+                                child: Text(
+                                  "View Document",
+                                  style: AppTheme.titleStyle(color: primaryColor),
+                                ),
+                              ),
+                            ],
+                          ),
+                        15.height(),
+
+                        Row(
+                          children: [
+                            LoanViewDetailsCard(
+                              headerText: 'Incured Date',
+                              titleText: DateFormat.yMEd().format(stateModel.singleLoan!.loanDateIncurred),
+                            ),
+                            const Spacer(),
+                            LoanViewDetailsCard(
+                              headerText: 'Due Date',
+                              titleText: DateFormat.yMEd().format(stateModel.singleLoan!.loanDateIncurred),
+                            ),
+                          ],
+                        ),
+                        10.height(),
+                        const Divider(),
+                        10.height(),
+
                         Text(
-                          "Loan Document",
+                          "Creditor Details",
                           style: AppTheme.headerStyle(),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            launchUrl(stateModel.singleLoan!.loanDoc);
-                          },
-                          child: Text(
-                            "View Document",
-                            style: AppTheme.titleStyle(color: primaryColor),
-                          ),
+
+                        const Divider(),
+
+                        10.height(),
+                        LoanViewDetailsCard(
+                          headerText: 'Full Name',
+                          titleText: stateModel.singleLoan!.fullName,
                         ),
+                        LoanViewDetailsCard(
+                          headerText: 'Phone Number',
+                          titleText: stateModel.singleLoan!.phoneNumber,
+                        ),
+                        50.height(),
+                        //
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomButton(
+                                onPressed: () async {
+                                  await stateModel.deleteLoan(widget.loanId);
+
+                                  if (stateModel.viewState == ViewState.Error) {
+                                    if (context.mounted) {
+                                      showMessage(context, stateModel.message, isError: true);
+                                    }
+                                    return;
+                                  }
+                                  if (stateModel.viewState == ViewState.Success) {
+                                    if (context.mounted) {
+                                      showMessage(context, stateModel.message);
+                                      context.go('/loan_dashboard');
+                                    }
+                                  }
+                                },
+                                text: 'Delete',
+                                width: 0,
+                              ),
+                            ),
+                            20.width(),
+                            Expanded(
+                              child: CustomButton(
+                                onPressed: () async {
+                                  ///success
+                                  await stateModel.updateLoan(widget.loanId);
+
+                                  if (stateModel.viewState == ViewState.Error) {
+                                    if (context.mounted) {
+                                      showMessage(context, stateModel.message, isError: true);
+                                    }
+                                    return;
+                                  }
+                                  if (stateModel.viewState == ViewState.Success) {
+                                    if (context.mounted) {
+                                      showMessage(context, stateModel.message);
+                                      context.go('/loan_dashboard');
+                                    }
+                                  }
+                                },
+                                width: 0,
+                                text: 'Mark as Completed',
+                              ),
+                            ),
+                          ],
+                        ),
+                        50.height()
                       ],
                     ),
-                  15.height(),
-
-                  Row(
-                    children: [
-                      LoanViewDetailsCard(
-                        headerText: 'Incured Date',
-                        titleText: DateFormat.yMEd().format(stateModel.singleLoan!.loanDateIncurred),
-                      ),
-                      const Spacer(),
-                      LoanViewDetailsCard(
-                        headerText: 'Due Date',
-                        titleText: DateFormat.yMEd().format(stateModel.singleLoan!.loanDateIncurred),
-                      ),
-                    ],
                   ),
-                  10.height(),
-                  const Divider(),
-                  10.height(),
-
-                  Text(
-                    "Creditor Details",
-                    style: AppTheme.headerStyle(),
-                  ),
-
-                  const Divider(),
-
-                  10.height(),
-                  LoanViewDetailsCard(
-                    headerText: 'Full Name',
-                    titleText: stateModel.singleLoan!.fullName,
-                  ),
-                  LoanViewDetailsCard(
-                    headerText: 'Phone Number',
-                    titleText: stateModel.singleLoan!.phoneNumber,
-                  ),
-                  50.height(),
-                  //
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomButton(
-                          onPressed: () async {
-                            await stateModel.deleteLoan(widget.loanId);
-
-                            if (stateModel.viewState == ViewState.Error) {
-                              if (context.mounted) {
-                                showMessage(context, stateModel.message, isError: true);
-                              }
-                              return;
-                            }
-                            if (stateModel.viewState == ViewState.Success) {
-                              if (context.mounted) {
-                                showMessage(context, stateModel.message);
-                                context.go('/loan_dashboard');
-                              }
-                            }
-                          },
-                          text: 'Delete',
-                          width: 0,
-                        ),
-                      ),
-                      20.width(),
-                      Expanded(
-                        child: CustomButton(
-                          onPressed: () async {
-                            ///success
-                            await stateModel.updateLoan(widget.loanId);
-
-                            if (stateModel.viewState == ViewState.Error) {
-                              if (context.mounted) {
-                                showMessage(context, stateModel.message, isError: true);
-                              }
-                              return;
-                            }
-                            if (stateModel.viewState == ViewState.Success) {
-                              if (context.mounted) {
-                                showMessage(context, stateModel.message);
-                                context.go('/loan_dashboard');
-                              }
-                            }
-                          },
-                          width: 0,
-                          text: 'Mark as Completed',
-                        ),
-                      ),
-                    ],
-                  ),
-                  50.height()
-                ],
-              ),
-            ),
-          ),
+                ),
         ),
       );
     });
