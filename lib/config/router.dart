@@ -40,7 +40,12 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/view_loan',
-      builder: (context, state) => const ViewLoadScreen(),
+      builder: (context, state) {
+        final loanId = state.uri.queryParameters['loan_id'];
+        return ViewLoadScreen(
+          loanId: loanId!,
+        );
+      },
     ),
     GoRoute(
       path: '/search_loan',

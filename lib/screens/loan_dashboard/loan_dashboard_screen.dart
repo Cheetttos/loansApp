@@ -158,7 +158,7 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
                                   return LoanInfoCard(
                                     loanData: data,
                                     onTap: () {
-                                      context.push('/view_loan');
+                                      context.push('/view_loan?loan_id=${data.loanId}');
                                     },
                                   );
                                 }),

@@ -2,6 +2,7 @@ import 'package:expense_tracker/config/extensions.dart';
 import 'package:expense_tracker/enums/enums.dart';
 import 'package:expense_tracker/provider/loan/loan_provider.dart';
 import 'package:expense_tracker/screens/loan_dashboard/local_widget/loan_view_details_card.dart';
+import 'package:expense_tracker/shared/utils/currency_formatter.dart';
 import 'package:expense_tracker/shared/utils/message.dart';
 import 'package:expense_tracker/shared/widgets/busy_overlay.dart';
 import 'package:expense_tracker/shared/widgets/custom_button.dart';
@@ -9,7 +10,9 @@ import 'package:expense_tracker/styles/color.dart';
 import 'package:expense_tracker/styles/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ViewLoadScreen extends StatefulWidget {
   final String loanId;
@@ -44,45 +47,47 @@ class _ViewLoadScreenState extends State<ViewLoadScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //loan name
-                  const LoanViewDetailsCard(
-                    titleText: 'Emergency loan',
+                  LoanViewDetailsCard(
+                    titleText: stateModel.singleLoan!.loanName,
                     headerText: 'Loan Name',
                   ),
 
-                  const LoanViewDetailsCard(
-                    titleText: 'Emergency loan',
-                    headerText: 'Loan Description',
-                  ),
-
-                  const LoanViewDetailsCard(
-                    titleText: '\$ 50,000',
+                  LoanViewDetailsCard(
+                    titleText:
+                        '${stateModel.singleLoan!.loanCurrency.symbol} ${currencyFormatter(double.parse(stateModel.singleLoan!.loanAmount))}',
                     headerText: 'Loan Amount',
                   ),
 
-                  Text(
-                    "Loan Document",
-                    style: AppTheme.headerStyle(),
-                  ),
-
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "View Document",
-                      style: AppTheme.titleStyle(color: primaryColor),
+                  if (stateModel.singleLoan!.loanDoc != null)
+                    Column(
+                      children: [
+                        Text(
+                          "Loan Document",
+                          style: AppTheme.headerStyle(),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            launchUrl(stateModel.singleLoan!.loanDoc);
+                          },
+                          child: Text(
+                            "View Document",
+                            style: AppTheme.titleStyle(color: primaryColor),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
                   15.height(),
 
-                  const Row(
+                  Row(
                     children: [
                       LoanViewDetailsCard(
                         headerText: 'Incured Date',
-                        titleText: '1st Jan 2024',
+                        titleText: DateFormat.yMEd().format(stateModel.singleLoan!.loanDateIncurred),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       LoanViewDetailsCard(
                         headerText: 'Due Date',
-                        titleText: '1st Jan 2024',
+                        titleText: DateFormat.yMEd().format(stateModel.singleLoan!.loanDateIncurred),
                       ),
                     ],
                   ),
@@ -98,13 +103,13 @@ class _ViewLoadScreenState extends State<ViewLoadScreen> {
                   const Divider(),
 
                   10.height(),
-                  const LoanViewDetailsCard(
+                  LoanViewDetailsCard(
                     headerText: 'Full Name',
-                    titleText: 'Destiny Ed',
+                    titleText: stateModel.singleLoan!.fullName,
                   ),
-                  const LoanViewDetailsCard(
+                  LoanViewDetailsCard(
                     headerText: 'Phone Number',
-                    titleText: '+234 8161215190',
+                    titleText: stateModel.singleLoan!.phoneNumber,
                   ),
                   50.height(),
                   //

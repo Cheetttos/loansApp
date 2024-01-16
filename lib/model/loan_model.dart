@@ -1,4 +1,5 @@
 class LoanModel {
+  String loanId;
   final String loanName;
   final String loanType;
   final dynamic loanDoc;
@@ -11,6 +12,7 @@ class LoanModel {
   final String phoneNumber;
 
   LoanModel({
+    required this.loanId,
     required this.loanName,
     required this.loanType,
     required this.loanDoc,
@@ -24,6 +26,7 @@ class LoanModel {
   });
 
   factory LoanModel.fromJson(Map<String, dynamic> json) => LoanModel(
+        loanId: json["loan_id"],
         loanName: json["loan_name"],
         loanType: json["loan_type"],
         loanDoc: json["loan_doc"],
@@ -37,6 +40,7 @@ class LoanModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "loan_id": loanId,
         "loan_name": loanName,
         "loan_type": loanType,
         "loan_doc": loanDoc,

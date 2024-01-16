@@ -118,6 +118,7 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
       // };
 
       final payload = LoanModel(
+          loanId: '',
           loanName: loanNameController.text,
           loanType: _selectedLoanType!.name,
           loanDoc: _uploadedDocument,
@@ -189,7 +190,6 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
 
   @override
   Future<void> searchLoan() {
-    // TODO: implement searchLoan
     throw UnimplementedError();
   }
 
@@ -241,15 +241,25 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
     message = 'Preparing your loans...';
     _updateState();
 
+    List<LoanModel> tempData = [];
+
     try {
       final result = await _loanRef.doc(_user!.uid).collection('loan_details').get();
 
       if (result.docs.isNotEmpty) {
         final loanData = result.docs;
 
+        for (var i in loanData) {
+          final loanDataModel = LoanModel.fromJson(i.data());
+
+          ///Add ID
+          loanDataModel.loanId = i.id;
+          tempData.add(loanDataModel);
+        }
+
         appLogger(loanData);
 
-        _loans = loanData.map((e) => LoanModel.fromJson(e.data())).toList();
+        _loans = tempData;
 
         _pendingLoans = (loans.where((element) => element.loanStatus == LoanStatus.Pending.name)).toList();
         _completedLoans =
