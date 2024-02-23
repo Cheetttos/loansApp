@@ -118,7 +118,7 @@ class _ViewLoadScreenState extends State<ViewLoadScreen> {
                           headerText: 'Phone Number',
                           titleText: stateModel.singleLoan!.phoneNumber,
                         ),
-                        50.height(),
+                        80.height(),
                         //
                         Row(
                           children: [

@@ -69,14 +69,14 @@ class _LoanDashboardScreenState extends State<LoanDashboardScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //date
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      '1st Jan 2024',
-                      style: AppTheme.headerStyle(),
-                    ),
-                  ),
-                  20.height(),
+                  // Align(
+                  //   alignment: Alignment.center,
+                  //   child: Text(
+                  //     '1st Jan 2024',
+                  //     style: AppTheme.headerStyle(),
+                  //   ),
+                  // ),
+                  // 20.height(),
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(

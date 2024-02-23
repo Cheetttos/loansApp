@@ -8,20 +8,19 @@ import 'package:expense_tracker/styles/color.dart';
 import 'package:expense_tracker/styles/theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_text_form_field/flutter_text_form_field.dart';
 import 'package:flutter_utilities/flutter_utilities.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthenticationProviderImpl>(builder: (context, stateModel, child) {
@@ -37,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Login',
+                      'Reset Password',
                       style: AppTheme.headerStyle(),
                     ),
                     120.height(),
@@ -47,38 +46,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       password: false,
                       border: Border.all(color: greyColor),
                     ),
-                    20.height(),
-                    CustomTextField(
-                      stateModel.passwordController,
-                      hint: 'Password',
-                      password: true,
-                      border: Border.all(color: greyColor),
-                    ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: TextButton(
-                        child: Text(
-                          'Forgot password',
-                          style: AppTheme.titleStyle(color: primaryColor, isBold: true),
-                        ),
-                        onPressed: () {
-                          context.go('/forgot_password');
-                        },
-                      ),
-                    ),
                     100.height(),
                     CustomButton(
                       onPressed: () async {
-                        if (stateModel.passwordController.text.isEmpty) {
-                          showMessage(context, 'All fields are required', isError: true);
-                          return;
-                        }
                         if (!FlutterUtilities().isEmailValid(stateModel.emailController.text.trim())) {
                           showMessage(context, "Invalid email provided", isError: true);
                           return;
                         }
 
-                        await stateModel.loginUser();
+                        await stateModel.resetPassword();
 
                         if (stateModel.state == ViewState.Error) {
                           if (context.mounted) {
@@ -89,24 +65,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (stateModel.state == ViewState.Success) {
                           if (context.mounted) {
                             showMessage(context, stateModel.message);
-                            context.go('/loan_dashboard');
+                            context.go('/login_screen');
                           }
                         }
                       },
-                      text: 'Login',
+                      text: 'Reset Password',
                     ),
                     50.height(),
                     Text.rich(TextSpan(children: [
                       TextSpan(
-                        text: "Don't have an account? ",
+                        text: "Remember Password? ",
                         style: AppTheme.titleStyle(isBold: true),
                       ),
                       TextSpan(
-                        text: "Sign Up",
+                        text: "Log in",
                         style: AppTheme.titleStyle(color: primaryColor, isBold: true),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            context.go('/register_screen');
+                            context.go('/login_screen');
                           },
                       )
                     ]))

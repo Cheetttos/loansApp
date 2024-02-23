@@ -149,6 +149,8 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
       _viewState = ViewState.Success;
       message = "Saved successfully";
       _updateState();
+
+      _clearFields();
     } on SocketException catch (_) {
       _viewState = ViewState.Error;
       message = 'Network error. Please try again later.';
@@ -371,5 +373,17 @@ class LoanProviderImpl extends ChangeNotifier implements LoanProviderUseCase {
       message = 'Error occured. Please try again later.';
       _updateState();
     }
+  }
+
+  void _clearFields() {
+    loanNameController.clear();
+    _selectedLoanType = null;
+    _uploadedDocument = null;
+    loanAmountController.clear();
+    selectedCurrency = null;
+    incurredDateController.clear();
+    dueDateController.clear();
+    creditorOrDebtorNameController.clear();
+    creditorOrDebtorPhoneNumberController.clear();
   }
 }

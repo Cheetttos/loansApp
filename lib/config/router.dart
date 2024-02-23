@@ -1,3 +1,4 @@
+import 'package:expense_tracker/screens/authentication/forgot_password.dart';
 import 'package:expense_tracker/screens/authentication/login.dart';
 import 'package:expense_tracker/screens/authentication/register.dart';
 import 'package:expense_tracker/screens/loan_dashboard/add_loan/add_loan.dart';
@@ -29,6 +30,10 @@ final router = GoRouter(
     GoRoute(
       path: '/login_screen',
       builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      path: '/forgot_password',
+      builder: (context, state) => const ForgotPasswordScreen(),
     ),
     GoRoute(
       path: '/loan_dashboard',
